@@ -9,12 +9,13 @@ class UserController {
             return res.status(400).json({ erro: 'Email já existe, favor cadastrar outro'});
         }
 
-        const {id, nomeUser, emailUser} = await User.create(req.body);
+        const {id, nomeUser, emailUser, tipoUser} = await User.create(req.body);
 
         return res.json({
             id,
             nomeUser,
             emailUser,
+            tipoUser,
         });
     }
 }
