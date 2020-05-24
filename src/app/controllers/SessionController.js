@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from "../models/User";
+import authConfig from "../../config/auth";
+import auth from "../../config/auth";
 
 
 class SessionController {
@@ -24,9 +26,8 @@ class SessionController {
                 nomeUser,
                 emailUser,
             },
-            // sercret gerado da frase 'sportsreserve' no md5online: https://www.md5online.org/
-            token: jwt.sign({id}, '1515d998e182df3988786b26248e6890', {
-                expiresIn: '7d',
+            token: jwt.sign({id}, authConfig.secret, {
+                expiresIn: authConfig.expiresIn,
             }),
         })
     }
