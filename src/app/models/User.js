@@ -3,29 +3,29 @@ import bcrypt from 'bcryptjs';
 class User extends Model {
     static init(sequelize) {
         super.init({
-            nomeUser: Sequelize.STRING,
-            emailUser: Sequelize.STRING,
+            name: Sequelize.STRING,
+            email: Sequelize.STRING,
             password: Sequelize.VIRTUAL,
-            passwordUser: Sequelize.STRING,
-            tipoUser: Sequelize.BOOLEAN,
+            passwordHash: Sequelize.STRING,
+            administrador: Sequelize.BOOLEAN,
         }, {
             sequelize,
             }
         );
         this.addHook('beforeSave',async (user) => {
             if (user.password) {
-                user.passwordUser = await bcrypt.hash(user.password, 8);
+                user.passwordHash = await bcrypt.hash(user.password, 8);
             }
         })
         return this;
     }
 
     static associate(models) {
-        this.belongsTo(models.File, { foreignKey: 'avatarId'});
+        this.belongsTo(models.File, { foreignKey: 'avatarId', as: 'avatar'});
     }
 
     checkPassword(password) {
-        return bcrypt.compare(password, this.passwordUser);
+        return bcrypt.compare(password, this.passwordHash);
     }
 }
 

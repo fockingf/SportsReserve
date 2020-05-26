@@ -5,8 +5,8 @@ class UserController {
     async store(req, res) {
         //validação de campos com a biblioteca Yup
         const schema = Yup.object().shape({
-            nomeUser: Yup.string().required(),
-            emailUser: Yup.string().email().required(),
+            name: Yup.string().required(),
+            email: Yup.string().email().required(),
             password: Yup.string().required().min(6),
         });
 
@@ -14,19 +14,19 @@ class UserController {
             return res.status(400).json({ erro: "Falha na validação dos campos"});
         }
 
-        const userExists = await User.findOne({ where: { emailUser: req.body.emailUser} });
+        const userExists = await User.findOne({ where: { email: req.body.email} });
 
         if(userExists) {
             return res.status(400).json({ erro: 'Email já existe, favor cadastrar outro'});
         }
 
-        const {id, nomeUser, emailUser, tipoUser} = await User.create(req.body);
+        const {id, name, email, administrador} = await User.create(req.body);
 
         return res.json({
             id,
-            nomeUser,
-            emailUser,
-            tipoUser,
+            name,
+            email,
+            administrador,
         });
     }
 
@@ -34,8 +34,8 @@ class UserController {
 
         //validação de campos com a biblioteca Yup
         const schema = Yup.object().shape({
-            nomeUser: Yup.string(),
-            emailUser: Yup.string().email(),
+            name: Yup.string(),
+            email: Yup.string().email(),
             oldPassword: Yup.string().min(6),
             password: Yup.string().min(6)
                 .when('oldPassword', (oldPassword, field) =>
@@ -49,29 +49,29 @@ class UserController {
             return res.status(400).json({ erro: "Falha na validação dos campos"});
         }
 
-        const { emailUser, oldPassword } = req.body;
+        const { email, oldPassword } = req.body;
 
         const user = await User.findByPk(req.userId);
 
-        if (emailUser !== user.emailUser) {
+        if (email !== user.email) {
 
-            const userExists = await User.findOne({where: emailUser});
+            const userExists = await User.findOne({where: email});
 
             if (userExists) {
-                return res.status(400).json({ erro: "Email já existe, favor cadastrar outro"});
+                return res.status(400).json({ erro: "Email já cadastrado. Favor cadastrar outro"});
             }
         }
         if (oldPassword && !(await user.checkPassword(oldPassword))) {
             return res.status(401).json({ erro: "Senha antiga não confere"});
         }
 
-        const {id, nomeUser, tipoUser } = await user.update(req.body);
+        const {id, name, administrador } = await user.update(req.body);
 
         return res.json({
             id,
-            nomeUser,
-            emailUser,
-            tipoUser
+            name,
+            email,
+            administrador
         });
     }
 }

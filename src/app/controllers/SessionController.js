@@ -8,7 +8,7 @@ class SessionController {
     async store(req, res) {
 
         const schema = Yup.object().shape({
-            emailUser: Yup.string().email().required(),
+            email: Yup.string().email().required(),
             password: Yup.string().required(),
         });
 
@@ -16,9 +16,9 @@ class SessionController {
             return res.status(400).json({ erro: "Campos inválidos"});
         }
 
-        const { emailUser, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({ where: { emailUser} });
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
             return res.status(401).json({ erro: "Usuário não encontrado!"});
@@ -28,13 +28,13 @@ class SessionController {
             return res.status(401).json({ erro: "Senha inválida!"});
         }
 
-        const { id, nomeUser } = user;
+        const { id, name } = user;
 
         return res.json({
             user: {
                 id,
-                nomeUser,
-                emailUser,
+                name,
+                email,
             },
             token: jwt.sign({id}, authConfig.secret, {
                 expiresIn: authConfig.expiresIn,
