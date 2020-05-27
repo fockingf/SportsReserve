@@ -1,6 +1,7 @@
-import Agendamento from "../models/Agendamento";
 import * as Yup from 'Yup';
+import {parseISO, startOfHour, isBefore} from "date-fns";
 import User from "../models/User";
+import Agendamento from "../models/Agendamento";
 
 class AgendamentoController {
     async store(request, response) {
@@ -22,6 +23,23 @@ class AgendamentoController {
 
         if (!isRecurso) {
             return response.status(401).json({ erro: "Voce só consegue criar agendamentos com recursos"})
+        }
+
+        const horaInicio =  startOfHour(parseISO(date));
+        if (isBefore(horaInicio, new Date())) {
+            return response.status(400).json({ erro: "Não é possivel agendar datas no passado"});
+        }
+
+        const checkDisponibilidade = await Agendamento.findOne({
+            where: {
+                recursoId,
+                canceledAt: null,
+                date: horaInicio,
+            }
+        })
+
+        if (checkDisponibilidade) {
+            return response.status(400).json({ erro: "Horario não disponivel para agendamento"});
         }
 
         const agendamento = await Agendamento.create({
