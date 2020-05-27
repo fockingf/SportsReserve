@@ -20,13 +20,13 @@ class UserController {
             return res.status(400).json({ erro: 'Email já existe, favor cadastrar outro'});
         }
 
-        const {id, name, email, administrador} = await User.create(req.body);
+        const {id, name, email, recurso} = await User.create(req.body);
 
         return res.json({
             id,
             name,
             email,
-            administrador,
+            recurso,
         });
     }
 
@@ -65,13 +65,13 @@ class UserController {
             return res.status(401).json({ erro: "Senha antiga não confere"});
         }
 
-        const {id, name, administrador } = await user.update(req.body);
+        const {id, name, recurso } = await user.update(req.body);
 
         return res.json({
             id,
             name,
             email,
-            administrador
+            recurso
         });
     }
 }

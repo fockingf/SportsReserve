@@ -1,4 +1,4 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize, { Model } from 'sequelize';
 
 class Agendamento extends Model {
     static init(sequelize) {
@@ -14,7 +14,7 @@ class Agendamento extends Model {
 
     static associate(models) {
         this.belongsTo(models.User, { foreignKey: 'userId', as: 'user'})
-        this.belongsTo(models.User, { foreignKey: 'adminId', as: 'admin'})
+        this.belongsTo(models.User, { foreignKey: 'recursoId', as: 'recurso'})
     }
 }
 

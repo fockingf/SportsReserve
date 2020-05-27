@@ -9,8 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       date: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -19,7 +19,7 @@ module.exports = {
         onDelete: 'SET NULL',
         allowNull: true,
       },
-      adminId: {
+      recursoId: {
         type: Sequelize.INTEGER,
         references: { model: 'Users', key: 'id' },
         onUpdate: 'CASCADE',

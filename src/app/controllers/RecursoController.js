@@ -1,10 +1,10 @@
 import User from "../models/User";
 import File from "../models/File";
 
-class AdminController {
+class RecursoController {
     async index(request, response) {
         const admin = await User.findAll({
-            where: { administrador: true },
+            where: { recurso: true },
             attributes: ['id', 'name', 'email', 'avatarId'],
             include: [{
                 model: File,
@@ -16,4 +16,4 @@ class AdminController {
     }
 }
 
-export default new AdminController();
+export default new RecursoController();

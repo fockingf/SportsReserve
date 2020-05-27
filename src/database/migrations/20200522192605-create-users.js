@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      administrador: {
+      recurso: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false,
