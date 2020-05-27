@@ -15,14 +15,13 @@ const upload = multer(multerConfig);
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
+// a partir daqui, apenas usuarios autenticados tem acesso a essas rotas.
 routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
-
 routes.get('/recursos', RecursoController.index);
-
+routes.get('/agendamentos', AgendamentoController.index);
 routes.post('/agendamentos', AgendamentoController.store);
-
 routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;

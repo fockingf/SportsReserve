@@ -4,6 +4,16 @@ import User from "../models/User";
 import Agendamento from "../models/Agendamento";
 
 class AgendamentoController {
+    async index(request, response) {
+        const agendamentos = await Agendamento.findAll({
+            where: {
+                userId:  request.userId, canceledAt: null
+            }
+        })
+        return response.json(agendamentos);
+    }
+
+
     async store(request, response) {
         const schema = Yup.object().shape({
             recursoId: Yup.number().required(),
