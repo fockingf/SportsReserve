@@ -2,13 +2,31 @@ import * as Yup from 'Yup';
 import {parseISO, startOfHour, isBefore} from "date-fns";
 import User from "../models/User";
 import Agendamento from "../models/Agendamento";
+import File from "../models/File";
 
 class AgendamentoController {
     async index(request, response) {
         const agendamentos = await Agendamento.findAll({
             where: {
                 userId:  request.userId, canceledAt: null
-            }
+            },
+            order: ['date'],
+            attributes: ['id', 'date'],
+            include: [
+                {
+                    model: User,
+                    as: 'recurso',
+                    attributes: ['id', 'name'],
+                    include: [
+                        {
+                            model: File,
+                            as: 'avatar',
+                            attributes: ['id','path','url'],
+                        }
+                    ]
+                }
+            ]
+
         })
         return response.json(agendamentos);
     }
