@@ -85,7 +85,7 @@ class AgendamentoController {
         const user = await User.findByPk(request.userId);
         const formattedDate = format(horaInicio, "dd 'de' MMMM', às' H:mm'h'",{ locale: ptbr});
         await Notification.create({
-            content: `Novo agendamento do(a) ${user.name} para o recurso tal para o dia ${formattedDate}`,
+            content: `Novo agendamento adicionado para o recurso ${user.name} para o dia ${formattedDate}`,
             user: recursoId,
         });
 
