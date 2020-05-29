@@ -26,6 +26,7 @@ routes.get('/agendamentos', AgendamentoController.index);
 routes.post('/agendamentos', AgendamentoController.store);
 routes.get('/agenda', AgendaController.index);
 routes.get('/notifications', NotificationController.index);
+routes.put('/notifications/:id', NotificationController.update);
 routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
