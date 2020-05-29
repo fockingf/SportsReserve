@@ -5,6 +5,7 @@ import User from "../models/User";
 import Agendamento from "../models/Agendamento";
 import File from "../models/File";
 import Notification from "../schemas/Notification";
+import Mail from "../../lib/Mail";
 
 class AgendamentoController {
     async index(request, response) {
@@ -35,7 +36,6 @@ class AgendamentoController {
         })
         return response.json(agendamentos);
     }
-
 
     async store(request, response) {
         const schema = Yup.object().shape({
@@ -93,7 +93,15 @@ class AgendamentoController {
     }
 
     async delete(request, response) {
-        const agendamento = await Agendamento.findByPk(request.params.id);
+        const agendamento = await Agendamento.findByPk(request.params.id, {
+            include: [
+                {
+                    model: User,
+                    as: 'recurso',
+                    attributes: ['name', 'email'],
+                }
+            ],
+        });
 
         if (agendamento.userId !== request.userId) {
             return response.status(401).json({ erro: "Vodê não tem permissão para cancelar este agendamento"});
@@ -108,6 +116,12 @@ class AgendamentoController {
         agendamento.canceledAt = new Date();
 
         await agendamento.save();
+
+        await Mail.sendMail({
+            to: `${agendamento.recurso.name} <${agendamento.recurso.email}>`,
+            subject: 'Agendamento Cancelado',
+            text: 'Um agendamento foi cancelado',
+        })
 
         return response.json(agendamento);
     }
