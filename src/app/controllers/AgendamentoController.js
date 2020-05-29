@@ -1,5 +1,5 @@
 import * as Yup from 'Yup';
-import {parseISO, startOfHour, isBefore, format} from "date-fns";
+import {parseISO, startOfHour, isBefore, format, subHours} from "date-fns";
 import ptbr from 'date-fns/locale/pt-BR';
 import User from "../models/User";
 import Agendamento from "../models/Agendamento";
@@ -90,6 +90,26 @@ class AgendamentoController {
         });
 
         response.json(agendamento);
+    }
+
+    async delete(request, response) {
+        const agendamento = await Agendamento.findByPk(request.params.id);
+
+        if (agendamento.userId !== request.userId) {
+            return response.status(401).json({ erro: "Vodê não tem permissão para cancelar este agendamento"});
+        }
+
+        const tempoMinimoCancelamento = subHours(agendamento.date, 2);
+
+        if (isBefore(tempoMinimoCancelamento, new Date())) {
+            return response.status(401).json({ erro: "Você só pode cancelar agendamentos com no mínimo 2h de antecedência."});
+        }
+
+        agendamento.canceledAt = new Date();
+
+        await agendamento.save();
+
+        return response.json(agendamento);
     }
 
 }
