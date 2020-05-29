@@ -83,7 +83,8 @@ class AgendamentoController {
 
         //Notificação do recurso agendado
         const user = await User.findByPk(request.userId);
-        const formattedDate = format(horaInicio, "dd 'de' MMMM', às' H:mm'h'",{ locale: ptbr});
+        const formattedDate = format(horaInicio, "dd 'de' MMMM', às' H:mm'h'",
+            { locale: ptbr});
         await Notification.create({
             content: `Novo agendamento adicionado para o recurso ${user.name} para o dia ${formattedDate}`,
             user: recursoId,
@@ -99,6 +100,11 @@ class AgendamentoController {
                     model: User,
                     as: 'recurso',
                     attributes: ['name', 'email'],
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['name'],
                 }
             ],
         });
@@ -120,7 +126,13 @@ class AgendamentoController {
         await Mail.sendMail({
             to: `${agendamento.recurso.name} <${agendamento.recurso.email}>`,
             subject: 'Agendamento Cancelado',
-            text: 'Um agendamento foi cancelado',
+            template: 'cancelamento',
+            context: {
+                recurso: agendamento.recurso.name,
+                user: agendamento.user.name,
+                date: format(agendamento.date, "dd 'de' MMMM', às' H:mm'h'",
+                    { locale: ptbr}),
+            },
         })
 
         return response.json(agendamento);
