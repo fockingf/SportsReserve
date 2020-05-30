@@ -45,3 +45,7 @@ nbproject
 .project
 .settings
 composer.lock
+
+# DIRECTORY #
+#############
+node_modules
