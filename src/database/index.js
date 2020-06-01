@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Sequelize from "sequelize";
 import mongoose from 'mongoose';
 import User from "../app/models/User";
@@ -21,8 +22,7 @@ class Database {
     }
 
     mongo() {
-        this.mongoConnection = mongoose.connect(
-            'mongodb://localhost:27017/sportsreserve',
+        this.mongoConnection = mongoose.connect(process.env.MONGO_URL,
             {
                 useNewUrlParser: true,
                 useFindAndModify: true,

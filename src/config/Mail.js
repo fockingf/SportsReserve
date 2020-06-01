@@ -1,10 +1,12 @@
+require('dotenv').config();
+
 export default {
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    secure: false,
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: process.env.MAIL_SECURE,
     auth: {
-        user: "65891b178c3be9",
-        pass: "da95fcd98175b8"
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
     },
     default: {
         from: 'Equipe SportsReserve <nao_responda@sportsreserve.com>',
