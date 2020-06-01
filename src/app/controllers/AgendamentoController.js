@@ -16,7 +16,7 @@ class AgendamentoController {
                 userId:  request.userId, canceledAt: null
             },
             order: ['date'],
-            attributes: ['id', 'date'],
+            attributes: ['id', 'date', 'past', 'cancelable'],
             limit: 20,
             offset: (page - 1) * 20,
             include: [
@@ -113,7 +113,7 @@ class AgendamentoController {
         if (agendamento.userId !== request.userId) {
             return response.status(401).json({ erro: "Vodê não tem permissão para cancelar este agendamento"});
         }
-
+        //define a antecedência mínima do agendamento.
         const tempoMinimoCancelamento = subHours(agendamento.date, 2);
 
         if (isBefore(tempoMinimoCancelamento, new Date())) {
