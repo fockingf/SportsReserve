@@ -8,10 +8,12 @@
     "fila": "nodemon src/queue.js"
   },
   "dependencies": {
+    "@sentry/node": "5.15.5",
     "bcryptjs": "^2.4.3",
     "bee-queue": "^1.2.3",
     "date-fns": "^2.0.0-beta.5",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "express-handlebars": "^4.0.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
@@ -20,6 +22,7 @@
     "nodemailer": "^6.4.8",
     "nodemailer-express-handlebars": "^4.0.0",
     "sequelize": "^5.21.10",
+    "youch": "^2.0.10",
     "yup": "^0.29.0"
   },
   "devDependencies": {
