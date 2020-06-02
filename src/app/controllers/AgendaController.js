@@ -1,7 +1,5 @@
 import {parseISO, startOfDay, endOfDay} from "date-fns";
 import {Op} from "sequelize";
-
-
 import User from "../models/User";
 import Agendamento from "../models/Agendamento";
 
@@ -32,6 +30,13 @@ class AgendaController {
                     ],
                 }
             },
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['name'],
+                }
+            ],
             order: ['date'],
         })
 
